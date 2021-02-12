@@ -1,0 +1,22 @@
+{
+	"name": "AzureSqlDatabase_CUST",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"parameters": {
+			"Servername": {
+				"type": "string",
+				"defaultValue": "datafactorylearn.database.windows.net"
+			},
+			"DBname": {
+				"type": "string",
+				"defaultValue": "Customer"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"connectionString": "integrated security=False;encrypt=True;connection timeout=30;data source=@{linkedService().Servername};initial catalog=@{linkedService().DBname};user id=DATA1",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZTEVBUk5JTkcxUEFOS0FKX2FmZDdhOGVlLTlhZmUtNDBkOC04ZWRiLWZlOGQ1YmI5MDM1NyINCn0="
+		}
+	}
+}

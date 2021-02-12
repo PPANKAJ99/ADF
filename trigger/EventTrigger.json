@@ -1,0 +1,31 @@
+{
+	"name": "EventTrigger",
+	"properties": {
+		"description": "EventTrigger",
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "PL_Copy",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"ServerName": "@triggerBody().folderPath",
+					"DBName": "@triggerBody().fileName"
+				}
+			}
+		],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/data/blobs/input/",
+			"blobPathEndsWith": ".txt",
+			"ignoreEmptyBlobs": true,
+			"scope": "/subscriptions/56978edc-ae32-4f18-bbb1-5ec4a06ef08a/resourceGroups/Datafactory/providers/Microsoft.Storage/storageAccounts/blobstoragel1earn",
+			"events": [
+				"Microsoft.Storage.BlobCreated",
+				"Microsoft.Storage.BlobDeleted"
+			]
+		}
+	}
+}

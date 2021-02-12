@@ -1,0 +1,26 @@
+{
+	"name": "ScheduleTrigger",
+	"properties": {
+		"description": "Daily Trigger",
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "PL_Copy",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 5,
+				"startTime": "2021-01-19T15:52:00Z",
+				"endTime": "2021-01-19T15:59:00Z",
+				"timeZone": "UTC"
+			}
+		}
+	}
+}

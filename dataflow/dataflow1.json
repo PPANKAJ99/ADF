@@ -1,0 +1,51 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTable2",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTable3",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTable4",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Join1"
+				},
+				{
+					"name": "ModifyColumn"
+				},
+				{
+					"name": "ConditionalSplit1"
+				},
+				{
+					"name": "Filter1"
+				},
+				{
+					"name": "Sort1"
+				}
+			],
+			"script": "source(output(\n\t\tID as integer,\n\t\tFNAME as string,\n\t\tLNAME as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source1\nsource(output(\n\t\tID as integer,\n\t\tFNAME as string,\n\t\tLNAME as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source2\nFilter1, source2 join(ConditionalSplit1@ID@ID == source2@ID,\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> Join1\nsource1 derive(FNAME = lower(FNAME)) ~> ModifyColumn\nModifyColumn split(greater(ID,1),\n\tdisjoint: false) ~> ConditionalSplit1@(ID, ID2)\nSort1 filter(equals(ID, 2)) ~> Filter1\nConditionalSplit1@ID sort(asc(FNAME, true)) ~> Sort1\nJoin1 sink(input(\n\t\tId as integer,\n\t\tFNAME as string,\n\t\tLastName as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:false,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tmapColumn(\n\t\tId = ConditionalSplit1@ID@ID,\n\t\tFNAME = ConditionalSplit1@ID@FNAME,\n\t\tLastName = ConditionalSplit1@ID@LNAME\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+		}
+	}
+}
